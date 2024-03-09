@@ -1,16 +1,33 @@
 import express from "express";
-
+import cors from "cors";
+import { Pool } from "pg";
+import dotenv from "dotenv";
 import pogsRouter from "./routes/pogs";
 
+dotenv.config();
+const port = process.env.PORT;
+console.log(port);
+
+const connection = process.env.DATABASE_URL;
+
+export const pool = new Pool({
+  connectionString: connection,
+});
+
 const app = express();
-const port = 3000;
 
-app.use("/pogs", pogsRouter);
+async function startServer() {
+  app
+    .use(cors())
+    .use(express.json())
+    .use("/api/pogs", pogsRouter)
+    .get("/", async (req: express.Request, res: express.Response) => {
+      res.json({ message: "success" });
+    })
 
-app.get("/", (req: express.Request, res: express.Response) => {
-  res.send("Hello World!");
-});
+    .listen(port, () => {
+      console.log(`App listening on port http://localhost:${port}`);
+    });
+}
 
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+startServer();
