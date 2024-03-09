@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { useRouter } from "next/navigation";
 
 type PogData = {
   id: number;
@@ -28,6 +29,7 @@ type Props = {
 };
 
 export default function DeleteButton({ pogPageId, data }: Props) {
+  const router = useRouter();
   console.log("DeleteButton pogPageId: ", pogPageId);
   function handleDelete() {
     console.log("Delete button clicked");
@@ -41,11 +43,13 @@ export default function DeleteButton({ pogPageId, data }: Props) {
             description: `Pogs ${data[0].name} with ticker of ${data[0].ticker_symbol} has been deleted and removed from the database.`,
           });
           return response.json();
+        } else {
+          throw new Error("Network response was not ok.");
         }
-        throw new Error("Network response was not ok.");
       })
       .then((data) => {
         console.log(data);
+        router.push("/pogs");
       })
       .catch((error) => {
         console.error("There was an error!", error);
