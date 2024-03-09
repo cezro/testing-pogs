@@ -1,5 +1,7 @@
 "use client";
 
+import DeleteButton from "@/components/pogs/buttons/DeletePogs";
+import EditButton from "@/components/pogs/buttons/EditPogs";
 import { useState, useEffect } from "react";
 
 type PogPageProps = {
@@ -17,8 +19,10 @@ type PogData = {
 };
 
 function PogPage({ params }: PogPageProps) {
-  const pogPageId = Number(params.id);
-  const [data, setData] = useState<PogData | null>(null);
+  const pogPageId = params.id;
+  const [data, setData] = useState<PogData[] | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -26,35 +30,54 @@ function PogPage({ params }: PogPageProps) {
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/pogs/${pogPageId}`
         );
+
         if (response.ok) {
           const jsonData = await response.json();
-          setData(jsonData);
-        } else {
-          console.error("Failed to fetch data");
+          if (jsonData.length === 0) {
+            setError("No Pogs found");
+          } else {
+            setData(jsonData);
+          }
+        } else if (response.status === 404) {
+          setError("Page not found");
+          return;
         }
       } catch (error) {
-        console.error("Error occurred:", error);
+        setError("Error occurred: " + error);
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchData();
-
-    return () => {
-      // Cleanup if needed
-    };
   }, [pogPageId]);
+
+  if (loading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error: {error}</p>;
+  }
 
   return (
     <div>
       <h1>{`PogPage ${pogPageId}`}</h1>
-      {data && (
-        <div>
-          <p>Name: {data.name}</p>
-          <p>Ticker Symbol: {data.ticker_symbol}</p>
-          <p>Price: {data.price}</p>
-          <p>Color: {data.color}</p>
-        </div>
+      {data && data.length > 0 && (
+        <>
+          <EditButton pogPageId={pogPageId} data={data} />
+          <DeleteButton pogPageId={pogPageId} data={data} />
+        </>
       )}
+      {data &&
+        data.map((pogs) => (
+          <div key={pogs.id}>
+            <p>Name: {pogs.name}</p>
+            <p>Ticker Symbol: {pogs.ticker_symbol}</p>
+            <p>Price: {pogs.price}</p>
+            <p>Color: {pogs.color}</p>
+          </div>
+        ))}
     </div>
   );
 }
