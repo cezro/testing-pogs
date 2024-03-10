@@ -28,6 +28,11 @@ function AddNewValue({ pogPageId, setIsAddingNewValue }: Props) {
       throw new Error("Price must be a valid number greater than 0");
     }
 
+    if (parseFloat(price) > 100000000) {
+      alert("Price must be less than 100000000");
+      throw new Error("Price must be less than 100,000,000");
+    }
+
     try {
       const response = await fetch(
         `${process.env.NEXT_PUBLIC_SERVER_URL}/api/pog-values/new`,

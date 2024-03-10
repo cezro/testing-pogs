@@ -14,7 +14,12 @@ pogsValueRouter.post("/new", async (req: Request, res: Response) => {
   try {
     if (parseFloat(price) <= 0) {
       res.status(400).json({ message: "Price must be greater than 0" });
-      return;
+      throw new Error("Price must be greater than 0");
+    }
+
+    if (parseFloat(price) > 100000000) {
+      res.status(400).json({ message: "Price must be less than 10,000,000" });
+      throw new Error("Price must be less than 10,000,000");
     }
 
     const client = await pool.connect();
