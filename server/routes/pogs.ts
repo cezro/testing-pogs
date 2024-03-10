@@ -19,6 +19,12 @@ pogsRouter.post("/new", async (req: Request, res: Response) => {
     );
 
     const pogsId = response.rows[0].id;
+
+    await client.query(
+      "INSERT INTO pog_values (pog_id, value) VALUES ($1, $2) RETURNING id",
+      [pogsId, parsedPrice]
+    );
+
     res.status(201).json({ id: pogsId, message: "Pogs created successfully" });
     console.log("Pogs created with id: ", pogsId);
     // release pool

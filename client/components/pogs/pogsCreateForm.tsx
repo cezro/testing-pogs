@@ -33,6 +33,7 @@ export function PogsCreationForm() {
 
   const onSubmit = async (data: PogsCreationFormProps) => {
     console.log(data);
+
     try {
       const parsedData = {
         ...data,

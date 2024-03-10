@@ -30,7 +30,6 @@ type Props = {
 
 export default function DeleteButton({ pogPageId, data }: Props) {
   const router = useRouter();
-  console.log("DeleteButton pogPageId: ", pogPageId);
   function handleDelete() {
     console.log("Delete button clicked");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/pogs/${pogPageId}`, {
