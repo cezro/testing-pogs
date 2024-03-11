@@ -1,15 +1,15 @@
 import CreatePogsButton from "@/components/pogs/createPogs";
-import { Button } from "@/components/ui/button";
-import React from "react";
+import TablePogs from "@/components/pogs/TablePogRow";
 
 type Props = {};
 
 function Pogs({}: Props) {
   return (
-    <main className="flex min-h-screen flex-col p-24">
+    <div className="flex min-h-screen flex-col p-24">
       <div>Pogs</div>
       <CreatePogsButton />
-    </main>
+      <TablePogs />
+    </div>
   );
 }
 

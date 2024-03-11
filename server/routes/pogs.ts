@@ -5,7 +5,24 @@ const pogsRouter = express.Router();
 
 pogsRouter.use(logger);
 
-pogsRouter.get("/", (req: Request, res: Response) => {});
+pogsRouter.get("/", async (req: Request, res: Response) => {
+  try {
+    const client = await pool.connect();
+    const response = await client.query("SELECT * FROM pogs");
+
+    console.log(response.rows);
+    if (response.rows.length === 0) {
+      res.status(404).json({ message: "Pogs not found" });
+      return;
+    }
+    if (response.rows.length > 0) {
+      res.status(200).json(response.rows);
+    }
+  } catch (error) {
+    console.error("Error fetching pogs:", error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+});
 
 pogsRouter.post("/new", async (req: Request, res: Response) => {
   const { name, ticker_symbol, price, color } = req.body;
