@@ -9,80 +9,62 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const invoices = [
-  {
-    invoice: "INV001",
-    paymentStatus: "Paid",
-    totalAmount: "$250.00",
-    paymentMethod: "Credit Card",
-    test: "test",
-  },
-  {
-    invoice: "INV002",
-    paymentStatus: "Pending",
-    totalAmount: "$150.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV003",
-    paymentStatus: "Unpaid",
-    totalAmount: "$350.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV004",
-    paymentStatus: "Paid",
-    totalAmount: "$450.00",
-    paymentMethod: "Credit Card",
-  },
-  {
-    invoice: "INV005",
-    paymentStatus: "Paid",
-    totalAmount: "$550.00",
-    paymentMethod: "PayPal",
-  },
-  {
-    invoice: "INV006",
-    paymentStatus: "Pending",
-    totalAmount: "$200.00",
-    paymentMethod: "Bank Transfer",
-  },
-  {
-    invoice: "INV007",
-    paymentStatus: "Unpaid",
-    totalAmount: "$300.00",
-    paymentMethod: "Credit Card",
-  },
-];
+// import { colorVariants } from "@/colorVariants";
+// import { DataPogs } from "@/lib";
+export const colorVariants = {
+  blue: "text-blue-600",
+  red: "text-red-600",
+  green: "text-green-600",
+  yellow: "text-yellow-600",
+  brown: "text-[#8B4513]",
+};
 
-export function TablePogs() {
+interface DataPogs {
+  id: number;
+  name: string;
+  ticker_symbol: string;
+  price: number;
+  color: keyof typeof colorVariants;
+}
+
+interface TablePogsProps {
+  allDataPogs: DataPogs[];
+}
+
+export function TablePogs(props: TablePogsProps) {
+  const { allDataPogs } = props;
   return (
     <Table>
       <TableCaption>A list of your recent invoices.</TableCaption>
       <TableHeader>
         <TableRow>
           <TableHead className="w-[200px]">Id</TableHead>
-          <TableHead>Status</TableHead>
-          <TableHead>Method</TableHead>
-          <TableHead>Test</TableHead>
-          <TableHead className="text-right">Amount</TableHead>
+          <TableHead>Name</TableHead>
+          <TableHead>Ticker Symbol</TableHead>
+          <TableHead className="text-right">Price</TableHead>
         </TableRow>
       </TableHeader>
+
       <TableBody>
-        {invoices.map((invoice) => (
-          <TableRow key={invoice.invoice}>
-            <TableCell className="font-medium">{invoice.invoice}</TableCell>
-            <TableCell>{invoice.paymentStatus}</TableCell>
-            <TableCell>{invoice.paymentMethod}</TableCell>
-            <TableCell>{invoice.test}</TableCell>
-            <TableCell className="text-right">{invoice.totalAmount}</TableCell>
+        {allDataPogs.map((pogs: DataPogs) => (
+          <TableRow key={pogs.id}>
+            <TableCell className="font-medium ">{pogs.id}</TableCell>
+            <TableCell>{pogs.name}</TableCell>
+            <TableCell className={`${colorVariants[pogs.color]} font-bold`}>
+              {pogs.ticker_symbol}
+            </TableCell>
+            <TableCell className="text-right">
+              ₱{" "}
+              {Number(pogs.price).toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+              })}
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>
-      <TableFooter>
-
-      </TableFooter>
+      <TableFooter></TableFooter>
     </Table>
   );
 }
+
 export default TablePogs;
