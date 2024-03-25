@@ -25,11 +25,11 @@ async function startServer() {
     .use("/api/pogs", pogsRouter)
     .get("/", async (req: express.Request, res: express.Response) => {
       res.json({ message: "success" });
-    });
+    })
 
-  // .listen(port, () => {
-  //   console.log(`App listening on port http://localhost:${port}`);
-  // });
+    .listen(port, () => {
+      console.log(`App listening on port http://localhost:${port}`);
+    });
 }
 
 startServer();
