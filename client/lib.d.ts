@@ -14,3 +14,4 @@ interface DataPogs {
   price: number;
   color: keyof typeof colorVariants;
 }
+

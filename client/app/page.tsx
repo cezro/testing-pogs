@@ -1,17 +1,11 @@
 "use client";
 
+import { PogSlider } from "@/components/home/slider";
+import { DataPogs } from "@/lib";
 import { useEffect, useState } from "react";
 
-interface Pog {
-  id: number;
-  name: string;
-  ticker_symbol: string;
-  price: number;
-  color: string;
-}
-
 export default function Home() {
-  const [allDataPogs, setAllDataPogs] = useState<Pog[]>([]);
+  const [allDataPogs, setAllDataPogs] = useState<DataPogs[]>([]);
 
   useEffect(() => {
     async function fetchAllData() {
@@ -25,9 +19,12 @@ export default function Home() {
     fetchAllData();
   }, []);
 
+  // 
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
       <h3>Home Page</h3>
+      <PogSlider allDataPogs={allDataPogs} direction="right" speed="normal" />
       {allDataPogs && allDataPogs.length > 0 ? (
         <ul>
           {allDataPogs.map((pog) => (
