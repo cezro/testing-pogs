@@ -30,6 +30,18 @@ pogsRouter.post("/new", async (req: Request, res: Response) => {
 
   try {
     const client = await pool.connect();
+
+    const queryText =
+      "SELECT * FROM pogs WHERE name = $1 OR ticker_symbol = $2";
+    const queryParams = [name, ticker_symbol];
+    const { rows } = await pool.query(queryText, queryParams);
+
+    if (rows.length > 0) {
+      return res
+        .status(409)
+        .json({ error: "There's already an existing name or ticker_symbol" });
+    }
+
     const response = await client.query(
       "INSERT INTO pogs (name, ticker_symbol, price, color) VALUES ($1,$2, $3, $4) RETURNING id",
       [name, ticker_symbol, parsedPrice, color]

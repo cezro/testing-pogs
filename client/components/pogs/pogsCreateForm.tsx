@@ -17,6 +17,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "../ui/use-toast";
 import { formSchema } from "@/lib/schemas/formSchema";
+import { PogsCreationFormProps } from "@/lib";
 
 export function PogsCreationForm() {
   const router = useRouter();
@@ -54,7 +55,15 @@ export function PogsCreationForm() {
       console.log(response.body);
 
       if (!response.ok) {
-        throw new Error(`Failed to create POG: ${response.statusText}`);
+        const errorData = await response.json();
+        const errorMessage = errorData.error || "Unknown error";
+
+        toast({
+          title: "Error",
+          description: `Failed to create POG: ${errorMessage}`,
+        });
+
+        throw new Error(`Failed to create POG: ${errorMessage}`);
       }
 
       const dataJson = await response.json();
@@ -69,10 +78,6 @@ export function PogsCreationForm() {
       router.push(`/pogs/${dataJson.id}`);
     } catch (err) {
       console.error(err);
-      toast({
-        title: "Error",
-        description: "There was an error creating the POG.",
-      });
     }
   };
 
