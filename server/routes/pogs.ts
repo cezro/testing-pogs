@@ -13,7 +13,7 @@ pogsRouter.get("/", async (req: Request, res: Response) => {
     console.log(response.rows);
     if (response.rows.length === 0) {
       res.status(404).json({ message: "Pogs not found" });
-      return;
+      return null;
     }
     if (response.rows.length > 0) {
       res.status(200).json(response.rows);
@@ -77,7 +77,7 @@ pogsRouter
 
       if (response.rows.length === 0) {
         res.status(404).json({ message: "Pogs not found" });
-        return;
+        return null;
       }
 
       res.status(200).json(response.rows);

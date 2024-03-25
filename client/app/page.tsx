@@ -19,26 +19,12 @@ export default function Home() {
     fetchAllData();
   }, []);
 
-  // 
+  //
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
-      <h3>Home Page</h3>
-      <PogSlider allDataPogs={allDataPogs} direction="right" speed="normal" />
-      {allDataPogs && allDataPogs.length > 0 ? (
-        <ul>
-          {allDataPogs.map((pog) => (
-            <li key={pog.id}>
-              <p>{pog.name}</p>
-              <p>{pog.ticker_symbol}</p>
-              <p>{pog.price}</p>
-              <p>{pog.color}</p>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No Pogs found</p>
-      )}
+    <main className="flex min-h-screen flex-col">
+      {!allDataPogs && <p>There&apos;s no pogs </p>}
+      {allDataPogs && <PogSlider allDataPogs={allDataPogs} />}
     </main>
   );
 }
