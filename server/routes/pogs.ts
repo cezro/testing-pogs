@@ -129,6 +129,7 @@ pogsRouter.param(
   (req: Request, res: Response, next: NextFunction, id) => {
     // req: Request.user = users[id];
     // console.log(req: Request.user)
+    console.log(req.body, "Hiii");
     next();
   }
 );

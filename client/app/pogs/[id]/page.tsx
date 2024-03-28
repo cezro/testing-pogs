@@ -4,6 +4,8 @@ import PogsGraph from "@/app/graph/page";
 import AddNewValue from "@/components/pogs/buttons/AddNewValue";
 import DeleteButton from "@/components/pogs/buttons/DeletePogs";
 import EditButton from "@/components/pogs/buttons/EditPogs";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 type PogPageProps = {
@@ -97,16 +99,26 @@ function PogPage({ params }: PogPageProps) {
     <>
       <div>
         <h1>{`PogPage ${pogPageId}`}</h1>
-        {data && data.length > 0 && (
-          <>
-            <EditButton pogPageId={pogPageId} data={data} />
-            <DeleteButton pogPageId={pogPageId} data={data} />
-            <AddNewValue
-              pogPageId={pogPageId}
-              setIsAddingNewValue={setIsAddingNewValue}
-            />
-          </>
-        )}
+        <div className="flex justify-between">
+          <div className="flex">
+            {data && (
+              <>
+                <EditButton pogPageId={pogPageId} data={data} />
+                <DeleteButton pogPageId={pogPageId} data={data} />
+                <AddNewValue
+                  pogPageId={pogPageId}
+                  setIsAddingNewValue={setIsAddingNewValue}
+                />
+              </>
+            )}
+          </div>
+          <div>
+            <Link href={"/"}>
+              <Button>Go To Homepage</Button>
+            </Link>
+          </div>
+        </div>
+
         {data &&
           data.map((pogs) => (
             <div key={pogs.id}>
