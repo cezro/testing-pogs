@@ -13,5 +13,5 @@ interface DataPogs {
   ticker_symbol: string;
   price: number;
   color: keyof typeof colorVariants;
+  createdat: string;
 }
-

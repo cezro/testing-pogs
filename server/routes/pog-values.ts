@@ -50,7 +50,7 @@ pogsValueRouter.route("/:id").get(async (req: Request, res: Response) => {
   try {
     const client = await pool.connect();
     const response = await client.query(
-      "SELECT value FROM pog_values WHERE pog_id = $1",
+      "SELECT value, createdAt FROM pog_values WHERE pog_id = $1",
       [id]
     );
 
