@@ -1,7 +1,8 @@
-import { NextFunction, Router } from "express";
+import express, { NextFunction } from "express";
 import { Request, Response } from "express";
 import { pool } from "../server";
-const pogsValueRouter = Router();
+const pogsValueRouter = express.Router();
+
 pogsValueRouter.use(logger);
 
 pogsValueRouter.get("/", (req: Request, res: Response) => {});
@@ -70,7 +71,7 @@ pogsValueRouter.route("/:id").get(async (req: Request, res: Response) => {
 pogsValueRouter.param(
   "id",
   (req: Request, res: Response, next: NextFunction, id) => {
-    // req: Request.user = u8sers[id];
+    // req: Request.user = users[id];
     // console.log(req: Request.user)
     next();
   }

@@ -5,7 +5,6 @@ import { Chart } from "react-google-charts";
 
 type Props = {
   pogPageId: string;
-  size: string;
 };
 
 type StockDataProps = {
@@ -13,13 +12,10 @@ type StockDataProps = {
   value: string;
 };
 
-function PogsGraph({ size, pogPageId }: Props) {
-  size = "20%";
+function PogsGraph({ pogPageId }: Props) {
   const [stockData, setStockData] = useState<StockDataProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
-
-  console.log(size);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,16 +45,16 @@ function PogsGraph({ size, pogPageId }: Props) {
   }, [pogPageId]);
 
   const graphData = () => {
-    const data: (string | number)[][] = [["Time", "$"]];
+    const data: (string | number)[][] = [["Time", "Stock Value"]];
 
     stockData.forEach((item) => {
       try {
         const date = new Date(item.createdat);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
 
-        const time = date.toLocaleTimeString();
-        const localDate = date.toLocaleDateString();
-
-        const timeString = `${localDate} ${time}`;
+        const timeString = `${hours}:${minutes}:${seconds}`;
         const value = parseFloat(item.value);
         if (!isNaN(value)) {
           data.push([timeString, value]);
@@ -72,45 +68,26 @@ function PogsGraph({ size, pogPageId }: Props) {
   };
 
   return (
-    <div className={`text-center w-[${size}] h-[${size}]`}>
+    <div className="text-center">
       {error && <div>{error}</div>}
       {stockData.length > 0 && (
-        <div className="grid-cols-2 grid">
-          <Chart
-            width={"100%"}
-            height={"400px"}
-            chartType="LineChart"
-            loader={<div>Loading Chart</div>}
-            data={graphData()}
-            options={{
-              hAxis: {
-                title: "Date",
-                format: "MMM d, yyyy",
-              },
-              vAxis: {
-                title: "Stock Value",
-              },
-              legend: "none",
-            }}
-          />
-          <Chart
-            width={"100%"}
-            height={"400px"}
-            chartType="LineChart"
-            loader={<div>Loading Chart</div>}
-            data={graphData()}
-            options={{
-              hAxis: {
-                title: "Date",
-                format: "MMM d, yyyy",
-              },
-              vAxis: {
-                title: "Stock Value",
-              },
-              legend: "none",
-            }}
-          />
-        </div>
+        <Chart
+          width={"100%"}
+          height={"400px"}
+          chartType="LineChart"
+          loader={<div>Loading Chart</div>}
+          data={graphData()}
+          options={{
+            hAxis: {
+              title: "Date",
+              format: "MMM d, yyyy", // Format date on the horizontal axis
+            },
+            vAxis: {
+              title: "Stock Value",
+            },
+            legend: "none",
+          }}
+        />
       )}
     </div>
   );
