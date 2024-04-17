@@ -17,6 +17,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { toast } from "../ui/use-toast";
 import { formSchema } from "@/lib/schemas/formSchema";
+import { PogsCreationFormProps } from "@/lib";
+import { HexColorPicker } from "react-colorful";
+import { useState } from "react";
 
 export function PogsCreationForm() {
   const router = useRouter();
@@ -27,7 +30,7 @@ export function PogsCreationForm() {
       name: "",
       ticker_symbol: "",
       price: 0,
-      color: "",
+      color: "000000",
     },
   });
 
@@ -124,8 +127,18 @@ export function PogsCreationForm() {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Color</FormLabel>
+              <HexColorPicker
+                onChange={(currentColor) => {
+                  field.onChange(currentColor);
+                }}
+              />
               <FormControl>
-                <Input placeholder="Color" {...field} />
+                <Input
+                  placeholder="Set Color"
+                  {...field}
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
