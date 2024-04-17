@@ -23,9 +23,21 @@ pogsValueRouter.post("/new", async (req: Request, res: Response) => {
     }
 
     const client = await pool.connect();
+
+    const currentRow = await client.query(
+      "SELECT value FROM pog_values WHERE pog_id = $1 ORDER BY createdAt DESC LIMIT 1",
+      [pogId]
+    );
+
+    let prevValue = null;
+
+    if (currentRow.rows.length > 0) {
+      prevValue = currentRow.rows[0].value;
+    }
+
     const response = await client.query(
-      "INSERT INTO pog_values (pog_id, value) VALUES ($1, $2) RETURNING id",
-      [pogId, parseFloat(price)]
+      "INSERT INTO pog_values (pog_id, value, prev_value) VALUES ($1, $2, $3) RETURNING id",
+      [pogId, parseFloat(price), prevValue]
     );
 
     const newPogValueId = response.rows[0].id;
@@ -50,7 +62,7 @@ pogsValueRouter.route("/:id").get(async (req: Request, res: Response) => {
   try {
     const client = await pool.connect();
     const response = await client.query(
-      "SELECT value, createdAt FROM pog_values WHERE pog_id = $1",
+      "SELECT value, createdAt, prev_value FROM pog_values WHERE pog_id = $1",
       [id]
     );
 

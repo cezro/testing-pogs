@@ -61,7 +61,8 @@ CREATE TABLE public.pog_values (
     id integer NOT NULL,
     pog_id integer,
     value numeric(10,2) NOT NULL,
-    createdat timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    createdat timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    prev_value numeric(10,2)
 );
 
 
@@ -334,4 +335,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20240326020325'),
     ('20240326020359'),
     ('20240326020436'),
-    ('20240326020518');
+    ('20240326020518'),
+    ('20240417123440');

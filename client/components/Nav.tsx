@@ -7,7 +7,7 @@ type Props = {};
 export default async function Nav() {
   const session: Session | null | undefined = await getSession();
   return (
-    <nav className="h-10 w-full px-7">
+    <nav className="h-10 w-full px-7 border border-b-2 shadow-sm">
       <div className="flex justify-between w-full h-full items-center">
         <div className="flex gap-3">
           <a href="/">Home</a>

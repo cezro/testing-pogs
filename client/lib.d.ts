@@ -8,10 +8,11 @@ type PogsCreationFormProps = {
 };
 
 interface DataPogs {
+  prev_value: number;
   id: number;
   name: string;
   ticker_symbol: string;
-  price: number;
+  value: number;
   color: keyof typeof colorVariants;
   createdat: string;
 }

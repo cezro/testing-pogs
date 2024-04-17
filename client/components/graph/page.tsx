@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
 type Props = {
-  pogPageId: string;
+  pogPageId?: string;
 };
 
 type StockDataProps = {
@@ -66,6 +66,8 @@ function PogsGraph({ pogPageId }: Props) {
 
     return data;
   };
+
+  console.log(stockData, "pog_values");
 
   return (
     <div className="text-center">

@@ -6,7 +6,7 @@ import { DataPogs } from "@/lib";
 
 function Pogs() {
   const [allDataPogs, setAllDataPogs] = useState<DataPogs[] | null>(null);
-  console.log(allDataPogs);
+  console.log(allDataPogs, "/pogs");
   useEffect(() => {
     async function fetchAllData() {
       try {

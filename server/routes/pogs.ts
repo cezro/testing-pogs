@@ -8,7 +8,9 @@ pogsRouter.use(logger);
 pogsRouter.get("/", async (req: Request, res: Response) => {
   try {
     const client = await pool.connect();
-    const response = await client.query("SELECT * FROM pogs");
+    const response = await client.query(
+      "SELECT pogs.id, pogs.name, pogs.ticker_symbol, pogs.color, pog_values.createdAt AS pog_values_createdAt, pog_values.value, pog_values.prev_value FROM pogs INNER JOIN pog_values ON pogs.id = pog_values.pog_id WHERE (pog_values.pog_id, pog_values.createdAt) IN (SELECT pog_id, MAX(createdAt) FROM pog_values GROUP BY pog_id);"
+    );
 
     console.log(response.rows);
     if (response.rows.length === 0) {
@@ -50,8 +52,8 @@ pogsRouter.post("/new", async (req: Request, res: Response) => {
     const pogsId = response.rows[0].id;
 
     await client.query(
-      "INSERT INTO pog_values (pog_id, value) VALUES ($1, $2) RETURNING id",
-      [pogsId, parsedPrice]
+      "INSERT INTO pog_values (pog_id, value, prev_value) VALUES ($1, $2, $3) RETURNING id",
+      [pogsId, parsedPrice, parsedPrice]
     );
 
     res.status(201).json({ id: pogsId, message: "Pogs created successfully" });

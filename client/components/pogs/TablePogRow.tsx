@@ -8,6 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { DataPogs } from "@/lib";
 
 // import { colorVariants } from "@/colorVariants";
 // import { DataPogs } from "@/lib";
@@ -19,21 +20,13 @@ export const colorVariants = {
   brown: "text-[#8B4513]",
 };
 
-interface DataPogs {
-  id: number;
-  name: string;
-  ticker_symbol: string;
-  price: number;
-  color: keyof typeof colorVariants;
-}
-
 interface TablePogsProps {
   allDataPogs: DataPogs[] | null;
 }
 
 export function TablePogs(props: TablePogsProps) {
   const { allDataPogs } = props;
-  console.log(allDataPogs);
+  console.log(allDataPogs, "table data");
 
   return (
     <>
@@ -46,7 +39,8 @@ export function TablePogs(props: TablePogsProps) {
               <TableHead className="w-[200px]">Id</TableHead>
               <TableHead>Name</TableHead>
               <TableHead>Ticker Symbol</TableHead>
-              <TableHead className="text-right">Price</TableHead>
+              <TableHead>Prev Price</TableHead>
+              <TableHead className="text-right">Current Price</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -58,9 +52,10 @@ export function TablePogs(props: TablePogsProps) {
                 <TableCell className={`${colorVariants[pogs.color]} font-bold`}>
                   {pogs.ticker_symbol}
                 </TableCell>
+                <TableCell>₱ {pogs.prev_value}</TableCell>
                 <TableCell className="text-right">
                   ₱{" "}
-                  {Number(pogs.price).toLocaleString("en-US", {
+                  {Number(pogs.value).toLocaleString("en-US", {
                     minimumFractionDigits: 2,
                   })}
                 </TableCell>

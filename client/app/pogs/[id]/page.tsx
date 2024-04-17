@@ -1,6 +1,6 @@
 "use client";
 
-import PogsGraph from "@/app/graph/page";
+import PogsGraph from "@/components/graph/page";
 import AddNewValue from "@/components/pogs/buttons/AddNewValue";
 import DeleteButton from "@/components/pogs/buttons/DeletePogs";
 import EditButton from "@/components/pogs/buttons/EditPogs";
@@ -87,6 +87,8 @@ function PogPage({ params }: PogPageProps) {
   if (error) {
     return <p>Error: {error}</p>;
   }
+
+  console.log(data);
 
   return (
     <>
