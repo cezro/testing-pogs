@@ -1,7 +1,6 @@
 "use client";
 
 import { PogSlider } from "@/components/home/slider";
-import CreatePogsButton from "@/components/pogs/createPogs";
 import { DataPogs } from "@/lib";
 import { useEffect, useState } from "react";
 
@@ -37,7 +36,6 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col">
-      <CreatePogsButton />
       {loading && <p>Loading...</p>}
       {error && <p>{error}</p>}
       {!loading && !error && !allDataPogs && <p>There&apos;s no pogs </p>}
