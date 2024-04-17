@@ -53,6 +53,7 @@ export function PogsCreationForm() {
         }
       );
       console.log(response.body);
+      console.log("You should error if no ok");
 
       if (!response.ok) {
         const errorData = await response.json();

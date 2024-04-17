@@ -4,7 +4,8 @@ import { app, pool } from "../server";
 let id = "";
 describe("Pogs API Testing", () => {
   beforeEach(async () => {
-    const query = await pool.query(`
+    const client = await pool.connect();
+    const query = await client.query(`
         INSERT INTO pogs (name, ticker_symbol, price, color)
         VALUES 
         ('blue eyes white dragon', 'BEWD', '9929', 'cyan')
@@ -14,18 +15,24 @@ describe("Pogs API Testing", () => {
     console.log("supposedly the id", query.rows[0].id);
   });
   afterEach(async () => {
-    const query = await pool.query(`
+    const client = await pool.connect();
+    const query = await client.query(`
     DELETE FROM pogs 
     WHERE name = 'blue eyes white dragon';
     `);
-    const query2 = await pool.query(`
+    const query2 = await client.query(`
     DELETE FROM pogs 
     WHERE name = 'red eyes black dragon';
     `);
-    const query3 = await pool.query(`
+    const query3 = await client.query(`
     DELETE FROM pogs 
     WHERE name = 'dark magician';
     `);
+    client.release();
+  });
+
+  afterAll(async () => {
+    await pool.end();
   });
 
   describe("Fetch all pogs", () => {

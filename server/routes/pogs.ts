@@ -18,9 +18,11 @@ pogsRouter.get("/", async (req: Request, res: Response) => {
     if (response.rows.length > 0) {
       res.status(200).json(response.rows);
     }
+    client.release();
   } catch (error) {
     console.error("Error fetching pogs:", error);
     res.status(500).json({ message: "Internal server error" });
+  } finally {
   }
 });
 
@@ -101,6 +103,9 @@ pogsRouter
       );
 
       const pogsId = response.rows[0].id;
+
+      client.release();
+
       res
         .status(200)
         .json({ id: pogsId, message: "Pogs updated successfully" });
@@ -118,6 +123,8 @@ pogsRouter
         id,
       ]);
       res.status(200).json({ message: "Pogs deleted successfully" });
+
+      client.release();
     } catch (err) {
       console.error("Error deleting pogs:", err);
       res.status(422).json({ message: "Error deleting pogs" });
