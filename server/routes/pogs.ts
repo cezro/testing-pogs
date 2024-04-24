@@ -1,5 +1,4 @@
-import express from "express";
-import { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { pool } from "../server";
 const pogsRouter = express.Router();
 
@@ -8,12 +7,14 @@ pogsRouter.use(logger);
 pogsRouter.get("/", async (req: Request, res: Response) => {
   try {
     const client = await pool.connect();
-    const response = await client.query("SELECT * FROM pogs");
+    const response = await client.query(
+      "SELECT pogs.id, pogs.name, pogs.ticker_symbol, pogs.color, pog_values.createdAt AS pog_values_createdAt, pog_values.value, pog_values.prev_value FROM pogs INNER JOIN pog_values ON pogs.id = pog_values.pog_id WHERE (pog_values.pog_id, pog_values.createdAt) IN (SELECT pog_id, MAX(createdAt) FROM pog_values GROUP BY pog_id);"
+    );
 
     console.log(response.rows);
     if (response.rows.length === 0) {
       res.status(404).json({ message: "Pogs not found" });
-      return;
+      return null;
     }
     if (response.rows.length > 0) {
       res.status(200).json(response.rows);
@@ -30,6 +31,18 @@ pogsRouter.post("/new", async (req: Request, res: Response) => {
 
   try {
     const client = await pool.connect();
+
+    const queryText =
+      "SELECT * FROM pogs WHERE name = $1 OR ticker_symbol = $2";
+    const queryParams = [name, ticker_symbol];
+    const { rows } = await pool.query(queryText, queryParams);
+
+    if (rows.length > 0) {
+      return res
+        .status(409)
+        .json({ error: "There's already an existing name or ticker_symbol" });
+    }
+
     const response = await client.query(
       "INSERT INTO pogs (name, ticker_symbol, price, color) VALUES ($1,$2, $3, $4) RETURNING id",
       [name, ticker_symbol, parsedPrice, color]
@@ -38,8 +51,8 @@ pogsRouter.post("/new", async (req: Request, res: Response) => {
     const pogsId = response.rows[0].id;
 
     await client.query(
-      "INSERT INTO pog_values (pog_id, value) VALUES ($1, $2) RETURNING id",
-      [pogsId, parsedPrice]
+      "INSERT INTO pog_values (pog_id, value, prev_value) VALUES ($1, $2, $3) RETURNING id",
+      [pogsId, parsedPrice, parsedPrice]
     );
 
     res.status(201).json({ id: pogsId, message: "Pogs created successfully" });
@@ -65,7 +78,7 @@ pogsRouter
 
       if (response.rows.length === 0) {
         res.status(404).json({ message: "Pogs not found" });
-        return;
+        return null;
       }
 
       res.status(200).json(response.rows);
@@ -117,6 +130,7 @@ pogsRouter.param(
   (req: Request, res: Response, next: NextFunction, id) => {
     // req: Request.user = users[id];
     // console.log(req: Request.user)
+    console.log(req.body, "Hiii");
     next();
   }
 );

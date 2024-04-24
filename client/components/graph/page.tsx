@@ -1,15 +1,19 @@
 "use client";
 
-import { parse } from "path";
 import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
 type Props = {
-  pogPageId: string;
+  pogPageId?: string;
+};
+
+type StockDataProps = {
+  createdat: string;
+  value: string;
 };
 
 function PogsGraph({ pogPageId }: Props) {
-  const [stockData, setStockData] = useState<[]>([]);
+  const [stockData, setStockData] = useState<StockDataProps[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
 
@@ -26,11 +30,9 @@ function PogsGraph({ pogPageId }: Props) {
             setError("No Pogs found");
           } else {
             setStockData(jsonData);
-            console.log(jsonData);
           }
         } else if (response.status === 404) {
           setError("No Stock Data");
-          return;
         }
       } catch (error) {
         setError("Error occurred: " + error);
@@ -43,19 +45,29 @@ function PogsGraph({ pogPageId }: Props) {
   }, [pogPageId]);
 
   const graphData = () => {
-    const data: (string | number)[][] = [["Date", "Stock Value"]];
+    const data: (string | number)[][] = [["Time", "Stock Value"]];
 
-    if (stockData.length !== 0 && stockData) {
-      for (let i = 0; i < stockData.length; i++) {
-        const value = parseFloat((stockData[i] as { value: string }).value);
+    stockData.forEach((item) => {
+      try {
+        const date = new Date(item.createdat);
+        const hours = date.getHours();
+        const minutes = date.getMinutes();
+        const seconds = date.getSeconds();
+
+        const timeString = `${hours}:${minutes}:${seconds}`;
+        const value = parseFloat(item.value);
         if (!isNaN(value)) {
-          data.push([i.toString(), value]);
+          data.push([timeString, value]);
         }
+      } catch (error) {
+        console.error("Error parsing date:", error);
       }
-    }
+    });
 
     return data;
   };
+
+  console.log(stockData, "pog_values");
 
   return (
     <div className="text-center">
@@ -70,6 +82,7 @@ function PogsGraph({ pogPageId }: Props) {
           options={{
             hAxis: {
               title: "Date",
+              format: "MMM d, yyyy", // Format date on the horizontal axis
             },
             vAxis: {
               title: "Stock Value",

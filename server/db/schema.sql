@@ -20,7 +20,9 @@ SET default_table_access_method = heap;
 CREATE TABLE public.pog_values (
     id integer NOT NULL,
     pog_id integer,
-    value numeric(10,2) NOT NULL
+    value numeric(10,2) NOT NULL,
+    createdat timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    prev_value numeric(10,2)
 );
 
 
@@ -53,7 +55,8 @@ CREATE TABLE public.pogs (
     name character varying(150) NOT NULL,
     ticker_symbol character varying(10) NOT NULL,
     price numeric(10,2) NOT NULL,
-    color character varying(30) NOT NULL
+    color character varying(30) NOT NULL,
+    createdat timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -87,6 +90,39 @@ CREATE TABLE public.schema_migrations (
 
 
 --
+-- Name: users; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.users (
+    id integer NOT NULL,
+    email character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    sub_id character varying(255) NOT NULL,
+    name character varying(255)
+);
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.users_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: users_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
+
+
+--
 -- Name: pog_values id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -101,11 +137,26 @@ ALTER TABLE ONLY public.pogs ALTER COLUMN id SET DEFAULT nextval('public.pogs_id
 
 
 --
+-- Name: users id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users ALTER COLUMN id SET DEFAULT nextval('public.users_id_seq'::regclass);
+
+
+--
 -- Name: pog_values pog_values_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.pog_values
     ADD CONSTRAINT pog_values_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pogs pogs_name_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pogs
+    ADD CONSTRAINT pogs_name_key UNIQUE (name);
 
 
 --
@@ -117,11 +168,43 @@ ALTER TABLE ONLY public.pogs
 
 
 --
+-- Name: pogs pogs_ticker_symbol_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.pogs
+    ADD CONSTRAINT pogs_ticker_symbol_key UNIQUE (ticker_symbol);
+
+
+--
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.schema_migrations
     ADD CONSTRAINT schema_migrations_pkey PRIMARY KEY (version);
+
+
+--
+-- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_email_key UNIQUE (email);
+
+
+--
+-- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: users users_sub_id_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.users
+    ADD CONSTRAINT users_sub_id_key UNIQUE (sub_id);
 
 
 --
@@ -143,4 +226,13 @@ ALTER TABLE ONLY public.pog_values
 
 INSERT INTO public.schema_migrations (version) VALUES
     ('20240309070929'),
-    ('20240309132452');
+    ('20240309132452'),
+    ('20240326020325'),
+    ('20240326020359'),
+    ('20240326020436'),
+    ('20240326020518'),
+    ('20240417123440'),
+    ('20240421042807'),
+    ('20240424054012'),
+    ('20240424054954'),
+    ('20240424061819');

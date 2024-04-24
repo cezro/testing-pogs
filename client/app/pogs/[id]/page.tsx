@@ -1,9 +1,12 @@
 "use client";
 
-import PogsGraph from "@/app/graph/page";
+import PogsGraph from "@/components/graph/page";
 import AddNewValue from "@/components/pogs/buttons/AddNewValue";
 import DeleteButton from "@/components/pogs/buttons/DeletePogs";
 import EditButton from "@/components/pogs/buttons/EditPogs";
+import { Button } from "@/components/ui/button";
+
+import Link from "next/link";
 import { useState, useEffect } from "react";
 
 type PogPageProps = {
@@ -18,6 +21,7 @@ type PogData = {
   ticker_symbol: string;
   price: number;
   color: string;
+  createdAt: string;
 };
 
 function PogPage({ params }: PogPageProps) {
@@ -93,20 +97,32 @@ function PogPage({ params }: PogPageProps) {
     return <p>Error: {error}</p>;
   }
 
+  console.log(data);
+
   return (
     <>
       <div>
         <h1>{`PogPage ${pogPageId}`}</h1>
-        {data && data.length > 0 && (
-          <>
-            <EditButton pogPageId={pogPageId} data={data} />
-            <DeleteButton pogPageId={pogPageId} data={data} />
-            <AddNewValue
-              pogPageId={pogPageId}
-              setIsAddingNewValue={setIsAddingNewValue}
-            />
-          </>
-        )}
+        <div className="flex justify-between">
+          <div className="flex">
+            {data && (
+              <>
+                <EditButton pogPageId={pogPageId} data={data} />
+                <DeleteButton pogPageId={pogPageId} data={data} />
+                <AddNewValue
+                  pogPageId={pogPageId}
+                  setIsAddingNewValue={setIsAddingNewValue}
+                />
+              </>
+            )}
+          </div>
+          <div>
+            <Link href={"/"}>
+              <Button>Go To Homepage</Button>
+            </Link>
+          </div>
+        </div>
+
         {data &&
           data.map((pogs) => (
             <div key={pogs.id}>
@@ -114,6 +130,7 @@ function PogPage({ params }: PogPageProps) {
               <p>Ticker Symbol: {pogs.ticker_symbol}</p>
               <p>Price: {pogs.price}</p>
               <p>Color: {pogs.color}</p>
+              <p>Time Created: {pogs.createdAt}</p>
             </div>
           ))}
       </div>

@@ -1,10 +1,11 @@
 -- migrate:up
 CREATE TABLE pogs (
   id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(150) NOT NULL,
-  ticker_symbol VARCHAR(10) NOT NULL,
+  name VARCHAR(150) NOT NULL UNIQUE,
+  ticker_symbol VARCHAR(10) NOT NULL UNIQUE,
   price DECIMAL(10, 2) NOT NULL,
-  color VARCHAR(30) NOT NULL
+  color VARCHAR(30) NOT NULL,
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 -- migrate:down
