@@ -33,7 +33,7 @@ const userRouter = express.Router();
 // });
 
 userRouter.post("/new", async (req: Request, res: Response) => {
-  const { sub, role } = req.body;
+  const { sub, role, balance } = req.body;
 
   console.log(sub);
 
@@ -52,8 +52,9 @@ userRouter.post("/new", async (req: Request, res: Response) => {
         .json({ error: "There's already an existing user" });
     }
 
-    const queryText = "INSERT INTO users (sub_id, role) VALUES ($1, $2)";
-    const queryParams = [sub, role];
+    const queryText =
+      "INSERT INTO users (sub_id, role, balance) VALUES ($1, $2, $3)";
+    const queryParams = [sub, role, balance];
 
     await client.query(queryText, queryParams);
 
