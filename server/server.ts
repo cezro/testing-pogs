@@ -8,6 +8,7 @@ import pogsValueRouter from "./routes/pog-values";
 
 import { userRouter } from "./routes/createUser";
 import { messagesRouter } from "./messages/messages.router";
+import adminRouter from "./routes/admin";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -28,6 +29,7 @@ async function startServer() {
     .use("/api/pog-values", pogsValueRouter)
     .use("/api/pogs", pogsRouter)
     .use("/api/messages", messagesRouter)
+    .use("/api/admin", adminRouter)
     .use("/api/user", userRouter)
     .get("/", async (req: Request, res: Response) => {
       res.json({ message: "success" });
