@@ -4,6 +4,7 @@ import CreatePogsButton from "@/components/pogs/createPogs";
 import TablePogs from "@/components/pogs/TablePogRow";
 import { DataPogs } from "@/lib";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import Balance from "@/components/pogs/balance";
 
 function Pogs() {
   const [allDataPogs, setAllDataPogs] = useState<DataPogs[] | null>(null);
@@ -68,6 +69,7 @@ function Pogs() {
 
   return (
     <div className="flex min-h-screen flex-col p-24">
+      <Balance />
       <div>Pogs</div>
       {role === "admin" ? <CreatePogsButton /> : <></>}
       {!allDataPogs && <>No Data Yet</>}
