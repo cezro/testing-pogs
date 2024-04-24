@@ -40,6 +40,8 @@ pogsValueRouter.post("/new", async (req: Request, res: Response) => {
       [pogId, parseFloat(price), prevValue]
     );
 
+    client.release();
+
     const newPogValueId = response.rows[0].id;
 
     res
@@ -49,7 +51,6 @@ pogsValueRouter.post("/new", async (req: Request, res: Response) => {
     console.log("New POG value created with id: ", newPogValueId);
 
     // Release pool
-    client.release();
   } catch (error) {
     console.error("Error inserting value:", error);
     res.status(500).json({ message: "Internal server error" });
@@ -66,6 +67,8 @@ pogsValueRouter.route("/:id").get(async (req: Request, res: Response) => {
       [id]
     );
 
+    client.release();
+
     if (response.rows.length === 0) {
       res.status(404).json({ message: "POG value not found" });
       return;
@@ -73,7 +76,6 @@ pogsValueRouter.route("/:id").get(async (req: Request, res: Response) => {
     console.log(response.rows);
 
     res.status(200).json(response.rows);
-    client.release();
   } catch (error) {
     console.error("Error fetching POG value:", error);
     res.status(500).json({ message: "Internal server error" });

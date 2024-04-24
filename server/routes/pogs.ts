@@ -11,6 +11,8 @@ pogsRouter.get("/", async (req: Request, res: Response) => {
       "SELECT pogs.id, pogs.name, pogs.ticker_symbol, pogs.color, pog_values.createdAt AS pog_values_createdAt, pog_values.value, pog_values.prev_value FROM pogs INNER JOIN pog_values ON pogs.id = pog_values.pog_id WHERE (pog_values.pog_id, pog_values.createdAt) IN (SELECT pog_id, MAX(createdAt) FROM pog_values GROUP BY pog_id);"
     );
 
+    client.release();
+
     console.log(response.rows);
     if (response.rows.length === 0) {
       res.status(404).json({ message: "Pogs not found" });
@@ -55,10 +57,11 @@ pogsRouter.post("/new", async (req: Request, res: Response) => {
       [pogsId, parsedPrice, parsedPrice]
     );
 
+    client.release();
+
     res.status(201).json({ id: pogsId, message: "Pogs created successfully" });
     console.log("Pogs created with id: ", pogsId);
     // release pool
-    client.release();
   } catch (err) {
     console.error("Error creating pogs:", err);
     res.status(500).json({ error: "Internal server error" });
@@ -76,13 +79,14 @@ pogsRouter
         id,
       ]);
 
+      client.release();
+
       if (response.rows.length === 0) {
         res.status(404).json({ message: "Pogs not found" });
         return null;
       }
 
       res.status(200).json(response.rows);
-      client.release();
     } catch (err) {
       console.log(err);
       res.send("Error " + err);
@@ -101,6 +105,8 @@ pogsRouter
         [name, ticker_symbol, parsedPrice, color, id]
       );
 
+      client.release();
+
       const pogsId = response.rows[0].id;
       res
         .status(200)
@@ -118,6 +124,7 @@ pogsRouter
       const response = await client.query("DELETE FROM pogs WHERE id = $1", [
         id,
       ]);
+      client.release();
       res.status(200).json({ message: "Pogs deleted successfully" });
     } catch (err) {
       console.error("Error deleting pogs:", err);
@@ -130,7 +137,7 @@ pogsRouter.param(
   (req: Request, res: Response, next: NextFunction, id) => {
     // req: Request.user = users[id];
     // console.log(req: Request.user)
-    console.log(req.body, "Hiii");
+
     next();
   }
 );
