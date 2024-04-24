@@ -95,10 +95,9 @@ CREATE TABLE public.schema_migrations (
 
 CREATE TABLE public.users (
     id integer NOT NULL,
-    email character varying(255) NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
     sub_id character varying(255) NOT NULL,
-    name character varying(255)
+    role character varying(255) NOT NULL,
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
 );
 
 
@@ -184,14 +183,6 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: users users_email_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.users
-    ADD CONSTRAINT users_email_key UNIQUE (email);
-
-
---
 -- Name: users users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -227,12 +218,5 @@ ALTER TABLE ONLY public.pog_values
 INSERT INTO public.schema_migrations (version) VALUES
     ('20240309070929'),
     ('20240309132452'),
-    ('20240326020325'),
-    ('20240326020359'),
-    ('20240326020436'),
-    ('20240326020518'),
     ('20240417123440'),
-    ('20240421042807'),
-    ('20240424054012'),
-    ('20240424054954'),
-    ('20240424061819');
+    ('20240421042807');
