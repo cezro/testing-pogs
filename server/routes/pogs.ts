@@ -1,5 +1,4 @@
-import express from "express";
-import { Request, Response, NextFunction } from "express";
+import express, { Request, Response, NextFunction } from "express";
 import { pool } from "../server";
 const pogsRouter = express.Router();
 

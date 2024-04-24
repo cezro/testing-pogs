@@ -1,6 +1,9 @@
 import React from "react";
 import { getSession, Session } from "@auth0/nextjs-auth0";
 import Image from "next/image";
+import Logout from "@/app/logout/page";
+import Login from "@/app/login/page";
+import Signup from "@/app/signup/page";
 
 type Props = {};
 
@@ -30,10 +33,15 @@ export default async function Nav() {
           )}
 
           <div>
-            {!session?.user && <a href="/api/auth/login">Login</a>}
+            {!session?.user && (
+              <div className="flex gap-3">
+                <Login />
+                <Signup />
+              </div>
+            )}
             {session?.user && (
               <div className="flex">
-                <a href="/api/auth/logout">Logout</a>{" "}
+                <Logout />
               </div>
             )}
           </div>

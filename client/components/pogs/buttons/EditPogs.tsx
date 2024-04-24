@@ -26,18 +26,11 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { toast } from "@/components/ui/use-toast";
-
-type PogData = {
-  id: number;
-  name: string;
-  ticker_symbol: string;
-  price: number;
-  color: string;
-};
+import { PogDataForm, PogsCreationFormProps } from "@/lib";
 
 type Props = {
   pogPageId: string;
-  data: PogData[];
+  data: PogDataForm[];
 };
 
 function EditButton({ pogPageId, data }: Props) {

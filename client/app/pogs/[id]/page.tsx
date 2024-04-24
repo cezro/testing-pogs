@@ -5,7 +5,7 @@ import AddNewValue from "@/components/pogs/buttons/AddNewValue";
 import DeleteButton from "@/components/pogs/buttons/DeletePogs";
 import EditButton from "@/components/pogs/buttons/EditPogs";
 import { Button } from "@/components/ui/button";
-import { DataPogs } from "@/lib";
+
 import Link from "next/link";
 import { useState, useEffect } from "react";
 
@@ -15,9 +15,18 @@ type PogPageProps = {
   };
 };
 
+type PogData = {
+  id: number;
+  name: string;
+  ticker_symbol: string;
+  price: number;
+  color: string;
+  createdAt: string;
+};
+
 function PogPage({ params }: PogPageProps) {
   const pogPageId = params.id;
-  const [data, setData] = useState<DataPogs[] | null>(null);
+  const [data, setData] = useState<PogData[] | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isAddingNewValue, setIsAddingNewValue] = useState<boolean>(false);
@@ -121,7 +130,7 @@ function PogPage({ params }: PogPageProps) {
               <p>Ticker Symbol: {pogs.ticker_symbol}</p>
               <p>Price: {pogs.price}</p>
               <p>Color: {pogs.color}</p>
-              <p>Time Created: {pogs.createdat}</p>
+              <p>Time Created: {pogs.createdAt}</p>
             </div>
           ))}
       </div>

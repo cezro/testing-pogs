@@ -1,21 +1,21 @@
 import Image from "next/image";
-import { getSession, Session } from "@auth0/nextjs-auth0";
+import { NextPage } from "next";
+import { withPageAuthRequired } from "@auth0/nextjs-auth0";
+import { getUserProfileData } from "@/services/profile.service";
 
-export default async function ProfileServer() {
-  const session: Session | null | undefined = await getSession();
+const ProfileServer: NextPage = withPageAuthRequired(
+  async () => {
+    const user = await getUserProfileData();
 
-  return (
-    session?.user && (
+    return (
       <div>
-        <Image
-          src={session.user.picture!}
-          alt={session.user.name!}
-          width={30}
-          height={30}
-        />
-        <h2>{session.user.name}</h2>
-        <p>{session.user.email}</p>
+        <Image src={user.picture!} alt={user.name!} width={30} height={30} />
+        <h2>{user.name}</h2>
+        <p>{user.email}</p>
       </div>
-    )
-  );
-}
+    );
+  },
+  { returnTo: "/profile-server" }
+);
+
+export default ProfileServer;

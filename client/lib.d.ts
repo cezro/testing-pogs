@@ -16,3 +16,11 @@ interface DataPogs {
   color: keyof typeof colorVariants;
   createdat: string;
 }
+
+interface PogDataForm {
+  id: number;
+  name: string;
+  ticker_symbol: string;
+  price: number;
+  color: string;
+}

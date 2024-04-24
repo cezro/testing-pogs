@@ -13,19 +13,12 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
+import { PogDataForm } from "@/lib";
 import { useRouter } from "next/navigation";
-
-type PogData = {
-  id: number;
-  name: string;
-  ticker_symbol: string;
-  price: number;
-  color: string;
-};
 
 type Props = {
   pogPageId: string;
-  data: PogData[];
+  data: PogDataForm[];
 };
 
 export default function DeleteButton({ pogPageId, data }: Props) {

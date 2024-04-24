@@ -9,7 +9,7 @@ import { calculatePercentageChange } from "@/utils/calculatePriceDiff";
 export const colorVariantsDiff = {
   "↑": "text-green-500",
   "↓": "text-red-500",
-  "": "text-black",
+  "": "text-gray-500",
 };
 
 export const PogSlider = ({
@@ -38,7 +38,7 @@ export const PogSlider = ({
                     </div>
 
                     <span
-                      className={`${colorVariantsDiff[calculatePercentageChange(dataPogs.prev_value, dataPogs.value).includes("↓") ? "↓" : "↑"]} font-bold`}
+                      className={`${colorVariantsDiff[calculatePercentageChange(dataPogs.prev_value, dataPogs.value).includes("↓") ? "↓" : calculatePercentageChange(dataPogs.prev_value, dataPogs.value).includes("↑") ? "↑" : ""]} font-bold`}
                     >
                       {calculatePercentageChange(
                         dataPogs.prev_value,
