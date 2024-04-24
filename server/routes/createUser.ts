@@ -3,51 +3,57 @@ import { pool } from "../server";
 
 const userRouter = express.Router();
 
-userRouter.get("/", async (req: Request, res: Response) => {
+// interface UserData {
+//   sub: string
+// }
+
+// userRouter.get("/", async (req: Request, res: Response) => {
+//   try {
+//     const { sub } = req.body;
+//     const client = await pool.connect();
+
+//     const response = await client.query(
+//       "SELECT * FROM users WHERE sub_id = $1",
+//       [sub]
+//     );
+
+//     client.release();
+
+//     if (response.rows.length === 0) {
+//       res.status(404).json({ message: "user no found" });
+//     }
+
+//     if (response.rows.length > 0) {
+//       res.status(200).json(response.rows);
+//     }
+//   } catch (error) {
+//     console.log("Error fetching user", error);
+//     res.status(500).json({ message: "Internal server error" });
+//   }
+// });
+
+userRouter.post("/new", async (req: Request, res: Response) => {
+  const { sub, role } = req.body;
+
+  console.log(sub);
+
   try {
-    const { sub } = req.body;
     const client = await pool.connect();
 
-    const response = await client.query(
+    const selectQuery = await client.query(
       "SELECT * FROM users WHERE sub_id = $1",
       [sub]
     );
+    const userExists = selectQuery.rows.length > 0;
 
-    client.release();
-
-    if (response.rows.length === 0) {
-      res.status(404).json({ message: "user no found" });
-    }
-
-    if (response.rows.length > 0) {
-      res.status(200).json(response.rows);
-    }
-  } catch (error) {
-    console.log("Error fetching user", error);
-    res.status(500).json({ message: "Internal server error" });
-  }
-});
-
-userRouter.post("/new", async (req: Request, res: Response) => {
-  const { userData } = req.body;
-
-  try {
-    const client = await pool.connect();
-
-    const isUserExist = await client.query(
-      "SELECT * FROM users WHERE sub_id = $1",
-      [userData.sub]
-    );
-
-    if (isUserExist) {
+    if (userExists) {
       return res
         .status(409)
         .json({ error: "There's already an existing user" });
     }
 
-    const queryText =
-      "INSERT INTO users (email, sub_id, name) VALUES ($1, $2, $3) RETURNING id";
-    const queryParams = [userData.email, userData.sub, userData.name];
+    const queryText = "INSERT INTO users (sub_id, role) VALUES ($1, $2)";
+    const queryParams = [sub, role];
 
     await client.query(queryText, queryParams);
 

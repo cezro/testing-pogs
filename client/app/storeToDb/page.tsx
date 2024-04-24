@@ -12,7 +12,12 @@ function PushToDb({}: Props) {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const userData = { user };
+        const userData = {
+          sub: user?.sub,
+          role: "user",
+        };
+
+        console.log(user?.sub);
 
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/user/new`,
