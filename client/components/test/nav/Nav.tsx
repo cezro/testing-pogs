@@ -1,15 +1,11 @@
-import React from "react";
-import { getSession, Session } from "@auth0/nextjs-auth0";
+import { Session } from "@auth0/nextjs-auth0";
 import Image from "next/image";
-import Logout from "@/app/logout/page";
-import Login from "@/app/login/page";
-import Signup from "@/app/signup/page";
 
 interface SessionProps {
   session?: Session | null;
 }
 
-export default async function Nav({ session }: SessionProps) {
+export default function Nav({ session }: SessionProps) {
   return (
     <nav className="h-10 w-full px-7 border border-b-2 shadow-sm">
       <div className="flex justify-between w-full h-full items-center">
@@ -23,6 +19,7 @@ export default async function Nav({ session }: SessionProps) {
               <h3 className="">{session?.user.name}</h3>
               <a href="/profile-client">
                 <Image
+                  data-testid="nav-user-image"
                   className="rounded-full"
                   src={session?.user.picture}
                   alt={session?.user.name!}
@@ -36,13 +33,13 @@ export default async function Nav({ session }: SessionProps) {
           <div data-testid="descendant">
             {!session?.user && (
               <div className="flex gap-3">
-                <Login />
-                <Signup />
+                <a href="/api/auth/login">Login</a>
+                <a href="/api/auth/signup">Sign Up</a>
               </div>
             )}
             {session?.user && (
               <div className="flex">
-                <Logout />
+                <a href="/api/auth/logout">Logout</a>
               </div>
             )}
           </div>

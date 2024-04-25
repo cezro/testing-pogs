@@ -97,7 +97,7 @@ function PogPage({ params }: PogPageProps) {
     return <p>Error: {error}</p>;
   }
 
-  console.log(data);
+  console.log(data, "pog data");
 
   return (
     <>
