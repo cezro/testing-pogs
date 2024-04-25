@@ -35,7 +35,9 @@ const userRouter = express.Router();
 userRouter.post("/new", async (req: Request, res: Response) => {
   const { sub, role, balance } = req.body;
 
-  console.log(sub);
+  if (!sub) {
+    return res.status(400).json({ error: "Sub value is required" });
+  }
 
   try {
     const client = await pool.connect();
@@ -44,19 +46,23 @@ userRouter.post("/new", async (req: Request, res: Response) => {
       "SELECT * FROM users WHERE sub_id = $1",
       [sub]
     );
+
     const userExists = selectQuery.rows.length > 0;
 
     if (userExists) {
+      client.release();
       return res
         .status(409)
-        .json({ error: "There's already an existing user" });
+        .json({ error: "User with this sub_id already exists" });
     }
+
 
     const queryText =
       "INSERT INTO users (sub_id, role, balance) VALUES ($1, $2, $3)";
     const queryParams = [sub, role, balance];
 
-    await client.query(queryText, queryParams);
+
+    await client.query(insertQuery, insertParams);
 
     client.release();
 

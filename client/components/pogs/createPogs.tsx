@@ -13,9 +13,11 @@ import { PogsCreationForm } from "./pogsCreateForm";
 
 export default function CreatePogsButton() {
   return (
-    <Dialog>
+    <Dialog data-testid="dialog-create-pogs">
       <DialogTrigger asChild>
-        <Button variant="outline">Create Pogs</Button>
+        <Button data-testid="create-pogs" variant="outline">
+          Create Pogs
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

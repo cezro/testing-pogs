@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Chart } from "react-google-charts";
 
 type Props = {
-  pogPageId?: string;
+  pogPageId: string;
 };
 
 type StockDataProps = {
@@ -20,6 +20,8 @@ function PogsGraph({ pogPageId }: Props) {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        if (!pogPageId) throw Error;
+
         const response = await fetch(
           `${process.env.NEXT_PUBLIC_SERVER_URL}/api/pog-values/${pogPageId}`
         );
@@ -73,23 +75,25 @@ function PogsGraph({ pogPageId }: Props) {
     <div className="text-center">
       {error && <div>{error}</div>}
       {stockData.length > 0 && (
-        <Chart
-          width={"100%"}
-          height={"400px"}
-          chartType="LineChart"
-          loader={<div>Loading Chart</div>}
-          data={graphData()}
-          options={{
-            hAxis: {
-              title: "Date",
-              format: "MMM d, yyyy", // Format date on the horizontal axis
-            },
-            vAxis: {
-              title: "Stock Value",
-            },
-            legend: "none",
-          }}
-        />
+        <div role="graph" data-testid="chart-container">
+          <Chart
+            width={"100%"}
+            height={"400px"}
+            chartType="LineChart"
+            loader={<div>Loading Chart</div>}
+            data={graphData()}
+            options={{
+              hAxis: {
+                title: "Date",
+                format: "MMM d, yyyy",
+              },
+              vAxis: {
+                title: "Stock Value",
+              },
+              legend: "none",
+            }}
+          />
+        </div>
       )}
     </div>
   );

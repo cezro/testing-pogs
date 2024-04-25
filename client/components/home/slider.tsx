@@ -26,7 +26,7 @@ export const PogSlider = ({
         <Marquee pauseOnHover={true} gradientWidth={200} gradient={true}>
           <div className="w-full flex flex-row gap-3">
             {allDataPogs.map((dataPogs) => (
-              <Link href={`/pogs/${dataPogs.id}`} key={dataPogs.id}>
+              <Link role="individual-slider" href={`/pogs/${dataPogs.id}`} key={dataPogs.id}>
                 <Button
                   containerClassName="w-fit h-7"
                   borderRadius="0.2rem"
