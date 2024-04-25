@@ -3,15 +3,6 @@ import DeleteButton from "@/__mocks__/delete-pogs";
 import { PogDataForm } from "@/lib";
 import { fireEvent, render, screen } from "@testing-library/react";
 
-// import axios from "axios";
-// import MockAdapter from "axios-mock-adapter";
-
-// const mock = new MockAdapter(axios);
-
-// mock.onDelete("/api/pogs/delete").reply(200, {
-//   message: "Successfully deleted",
-// });
-
 const pogsData: PogDataForm[] = [
   {
     color: "white",
