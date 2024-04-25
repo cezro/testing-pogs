@@ -10,7 +10,6 @@ pogsRouter.get("/", async (req: Request, res: Response) => {
     const response = await client.query(
       "SELECT pogs.id, pogs.name, pogs.ticker_symbol, pogs.color, pog_values.createdAt AS pog_values_createdAt, pog_values.value, pog_values.prev_value FROM pogs INNER JOIN pog_values ON pogs.id = pog_values.pog_id WHERE (pog_values.pog_id, pog_values.createdAt) IN (SELECT pog_id, MAX(createdAt) FROM pog_values GROUP BY pog_id);"
     );
-
     client.release();
 
     console.log(response.rows);
