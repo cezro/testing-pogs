@@ -33,7 +33,7 @@ const userRouter = express.Router();
 // });
 
 userRouter.post("/new", async (req: Request, res: Response) => {
-  const { sub, role } = req.body;
+  const { sub, role, balance } = req.body;
 
   if (!sub) {
     return res.status(400).json({ error: "Sub value is required" });
@@ -56,8 +56,11 @@ userRouter.post("/new", async (req: Request, res: Response) => {
         .json({ error: "User with this sub_id already exists" });
     }
 
-    const insertQuery = "INSERT INTO users (sub_id, role) VALUES ($1, $2)";
-    const insertParams = [sub, role];
+
+    const queryText =
+      "INSERT INTO users (sub_id, role, balance) VALUES ($1, $2, $3)";
+    const queryParams = [sub, role, balance];
+
 
     await client.query(insertQuery, insertParams);
 

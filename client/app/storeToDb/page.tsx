@@ -15,6 +15,7 @@ function PushToDb({}: Props) {
         const userData = {
           sub: user?.sub,
           role: "user",
+          balance: 10000,
         };
 
         console.log(user?.sub);
