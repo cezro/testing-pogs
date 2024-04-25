@@ -62,7 +62,7 @@ userRouter.post("/new", async (req: Request, res: Response) => {
     const queryParams = [sub, role, balance];
 
 
-    await client.query(insertQuery, insertParams);
+    await client.query(queryText, queryParams);
 
     client.release();
 
