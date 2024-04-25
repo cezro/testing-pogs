@@ -8,4 +8,4 @@ CREATE TABLE portfolio (
 );
 
 -- migrate:down
-DROP TABLE portfolio
+DROP TABLE portfolio;

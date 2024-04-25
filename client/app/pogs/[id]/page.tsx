@@ -2,6 +2,7 @@
 
 import PogsGraph from "@/components/graph/page";
 import AddNewValue from "@/components/pogs/buttons/AddNewValue";
+import BuyButton from "@/components/pogs/buttons/BuyPogs";
 import DeleteButton from "@/components/pogs/buttons/DeletePogs";
 import EditButton from "@/components/pogs/buttons/EditPogs";
 import { Button } from "@/components/ui/button";
@@ -107,6 +108,7 @@ function PogPage({ params }: PogPageProps) {
           <div className="flex">
             {data && (
               <>
+                <BuyButton pogPageId={pogPageId} />
                 <EditButton pogPageId={pogPageId} data={data} />
                 <DeleteButton pogPageId={pogPageId} data={data} />
                 <AddNewValue
