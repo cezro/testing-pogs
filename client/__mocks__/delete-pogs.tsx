@@ -12,7 +12,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import { PogDataForm } from "@/lib";
-import { useRouter } from "next/navigation";
 
 type Props = {
   pogPageId: string;
@@ -20,7 +19,6 @@ type Props = {
 };
 
 export default function DeleteButton({ pogPageId, data }: Props) {
-  const router = useRouter();
   function handleDelete() {
     console.log("Delete button clicked");
     fetch(`${process.env.NEXT_PUBLIC_SERVER_URL}/api/pogs/${pogPageId}`, {
@@ -39,7 +37,6 @@ export default function DeleteButton({ pogPageId, data }: Props) {
       })
       .then((data) => {
         console.log(data);
-        router.push("/pogs");
       })
       .catch((error) => {
         console.error("There was an error!", error);

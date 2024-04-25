@@ -120,9 +120,13 @@ pogsRouter
 
     try {
       const client = await pool.connect();
+
+      await client.query("DELETE FROM pog_values WHERE pog_id = $1", [id]);
+
       const response = await client.query("DELETE FROM pogs WHERE id = $1", [
         id,
       ]);
+
       client.release();
       res.status(200).json({ message: "Pogs deleted successfully" });
     } catch (err) {
