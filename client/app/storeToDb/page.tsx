@@ -1,13 +1,15 @@
 "use client";
 
 import { useUser } from "@auth0/nextjs-auth0/client";
-
+import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
 
 type Props = {};
 
 function PushToDb({}: Props) {
   const { user, error, isLoading } = useUser();
+
+  const router = useRouter();
 
   useEffect(() => {
     async function fetchUser() {
@@ -33,6 +35,7 @@ function PushToDb({}: Props) {
       } catch (error) {
         throw Error("Failed to add new user");
       }
+      router.push("/");
     }
     fetchUser();
   }, [user]);
