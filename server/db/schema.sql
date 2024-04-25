@@ -97,7 +97,8 @@ CREATE TABLE public.users (
     id integer NOT NULL,
     sub_id character varying(255) NOT NULL,
     role character varying(255) NOT NULL,
-    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP
+    created_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP,
+    balance numeric(10,2)
 );
 
 
@@ -219,4 +220,5 @@ INSERT INTO public.schema_migrations (version) VALUES
     ('20240309070929'),
     ('20240309132452'),
     ('20240417123440'),
-    ('20240421042807');
+    ('20240421042807'),
+    ('20240424150944');
