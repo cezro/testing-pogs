@@ -10,6 +10,7 @@ import { userRouter } from "./routes/createUser";
 import { messagesRouter } from "./messages/messages.router";
 import adminRouter from "./routes/admin";
 import balanceRouter from "./routes/balance";
+import pogsTransactRouter from "./routes/pogTransact";
 
 dotenv.config();
 const port = process.env.PORT;
@@ -33,6 +34,7 @@ async function startServer() {
     .use("/api/admin", adminRouter)
     .use("/api/user", userRouter)
     .use("/api/balance", balanceRouter)
+    .use("/api/pogsTransact", pogsTransactRouter)
     .get("/", async (req: Request, res: Response) => {
       res.json({ message: "success" });
     })
